@@ -1,10 +1,23 @@
-import React, { useEffect } from 'react'
-import { View, Text,  } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { View, Text, ActivityIndicator } from 'react-native'
 import { PieChart } from 'react-native-svg-charts'
 import { Text as TextSVG } from 'react-native-svg'
 
 
 const DashBoard = ({navigation}) => {
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    navigation.setOptions({
+      headerShown: false
+    })
+    setTimeout(() =>{ 
+      setIsLoading(false)
+      navigation.setOptions({
+        headerShown: true
+      })
+    }, 2000)
+    
+  }, [])
 
         const data = [
             {
@@ -40,7 +53,11 @@ const DashBoard = ({navigation}) => {
           })
       }
 
-        return (
+        return (isLoading ? 
+          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <ActivityIndicator size="large" color="#140A7E" />
+          </View>
+        :
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
               <View style= {{flex: 1, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
                 <View style= {{backgroundColor: '#21C3A7', height: '60%', width: '70%', justifyContent: 'center', alignItems: 'center', borderRadius: 15 }}>

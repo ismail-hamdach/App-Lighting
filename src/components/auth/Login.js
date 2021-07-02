@@ -73,7 +73,7 @@ const Login = ({navigation}) =>{
                                 setIsLoading(true);
                                 setTimeout(() => {
                                     setIsLoading(false);
-                                }, 1000);
+                                }, 3000);
                                 singin(email, password);
                             }
                         }}

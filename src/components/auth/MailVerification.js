@@ -5,7 +5,6 @@ import {
   TextInput,
   View,
   TouchableOpacity,
-  Image,
 } from 'react-native';
 import firebase from 'firebase/app'
 import "firebase/auth";

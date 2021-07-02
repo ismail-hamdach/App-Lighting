@@ -1,18 +1,37 @@
-import React, { useContext, useState } from 'react'
-import {View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import React, { useContext, useState, useEffect } from 'react'
+import {View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator } from 'react-native'
+
 
 import {AuthContext} from '../../providers/AuthProvider'
 
-const Home = () =>{
+const Home = ({navigation}) =>{
     const {user} = useContext(AuthContext);
     const {logOut} = useContext(AuthContext);
+    const [isLoading, setIsLoading] = useState(true);
     const profile = "https://firebasestorage.googleapis.com/v0/b/app-lamps.appspot.com/o/profile.png?alt=media&token=6a471065-e8fd-42af-b019-91e1dbfa4883"
 
 
-    const graphicData = [{ y: 10, x: '5%'},{ y: 90, x: '90%'},{ y: 50, x: '50%'},{ y: 20, x: '20%'},{ y: 70, x: '70%'},];
+    useEffect(() => {
+      navigation.setOptions({
+        headerShown: false
+      })
+      setTimeout(() =>{ 
+        setIsLoading(false)
+        navigation.setOptions({
+          headerShown: true
+        })
+      }, 2000)
+      
+    }, [])
+
+    
 
 
-    return(
+    return(isLoading ? 
+        <View style={styles.container}>
+          <ActivityIndicator size="large" color="#140A7E" />
+        </View>
+      :
         <View style={styles.container}>
             <Image style={styles.image} source={{uri: user.photoURL??profile}}/>
             <Text style={styles.title}>{user.displayName??'Name'}</Text>
@@ -29,10 +48,8 @@ const Home = () =>{
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        position: 'relative',
-        top: 30,
-        // justifyContent: 'center',
-        // alignItems: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
     },item: {
         backgroundColor: '#F0F0F0',
     

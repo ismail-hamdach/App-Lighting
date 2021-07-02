@@ -17,7 +17,7 @@ export const AuthProvider = ({children}) => {
     
     const [user, setUser] = useState(null);
     const [err, setErr] = useState(null);
-    const [role, setRole] = useState(null);
+    const [role, setRole] = useState('none');
     if (!firebase.apps.length){
         firebase.initializeApp(firebaseConfig);
     }

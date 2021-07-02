@@ -15,7 +15,7 @@ import ClientStack from '../navigation/ClientStack'
 const Rootes = () => {
   
   const {user, setUser, role, setRole} = useContext(AuthContext);
-
+  
   const getRole = async (uid, roleRetreived) => {
 
     var role = [];
@@ -38,7 +38,7 @@ const Rootes = () => {
       setTimeout(() => {
         if(user) 
         getRole(user.uid, setRole)
-      }, 50)
+      }, 20)
 
   }
 
@@ -48,10 +48,9 @@ const Rootes = () => {
   }, [user])
 
   return (
-   
     <NavigationContainer>
     
-        { user ? (role === true ?? (role === "admin" ? <AdminStack/> : <ClientStack/>)) : <AuthStack/> }
+        { user ? (role !== 'none' ? (role === "admin" ? <AdminStack/> : <ClientStack/>) : <AuthStack/>) : <AuthStack/> }
 
     </NavigationContainer>
    
