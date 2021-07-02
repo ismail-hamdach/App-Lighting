@@ -8,11 +8,15 @@ const Home = () =>{
     const {logOut} = useContext(AuthContext);
     const profile = "https://firebasestorage.googleapis.com/v0/b/app-lamps.appspot.com/o/profile.png?alt=media&token=6a471065-e8fd-42af-b019-91e1dbfa4883"
 
+
+    const graphicData = [{ y: 10, x: '5%'},{ y: 90, x: '90%'},{ y: 50, x: '50%'},{ y: 20, x: '20%'},{ y: 70, x: '70%'},];
+
+
     return(
         <View style={styles.container}>
             <Image style={styles.image} source={{uri: user.photoURL??profile}}/>
             <Text style={styles.title}>{user.displayName??'Name'}</Text>
-            {/* <Button title = {"Se déconnecter"} onPress = {() => {logOut()}}/> */}
+            
             <TouchableOpacity style={styles.buttomLogOut} 
               onPress={ () => {logOut()}}
             >

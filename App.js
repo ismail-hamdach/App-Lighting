@@ -5,7 +5,7 @@ import Index from './src/navigation/Index'
 export default function App() {
   
   return (
-    <Index/>
+    <Index style={{backgroundColor: '#fffff', justifyContent: 'center', alignItems: 'center'}}/>
   );
 
 }

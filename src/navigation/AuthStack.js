@@ -11,10 +11,18 @@ const AuthStack = () => {
 
   return (
 
-      <stack.Navigator initialRouteName="login" headerMode="none">
-         <stack.Screen name="login" component={Login}/> 
-         <stack.Screen name="forget" component={ForgetPass}/> 
-         <stack.Screen name="forgetPassSucc" component={ForgetPassSucc}/> 
+      <stack.Navigator initialRouteName="login" headerMode="screen" screenOptions={{
+        headerTintColor: 'white',
+        headerStyle: { backgroundColor: '#3d3d3d' },
+        headerTitleStyle: {
+          fontWeight: 'bold'
+        }
+      }}>
+         <stack.Screen name="login" component={Login} options={{
+           headerShown: false,
+         }}/> 
+         <stack.Screen name="forget" options={{ title: 'Réinitialisation' }} component={ForgetPass}/> 
+         <stack.Screen name="forgetPassSucc" options={{ title: 'Réinitialisation' }} component={ForgetPassSucc}/> 
       </stack.Navigator>
         
   );

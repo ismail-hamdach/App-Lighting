@@ -11,7 +11,7 @@ export default function App({navigation}) {
   return (
     <View style={styles.main_container}>
 
-      <View style={styles.container_body}>
+      
         <Text style={styles.textetape}> Etape 2 </Text>
         <Text style={styles.text}>S'il vous plaît vérifiez votre boîte email </Text>
         <Text style={styles.text}>nous vous avons envoyé un lien</Text>
@@ -21,41 +21,28 @@ export default function App({navigation}) {
 
         <TouchableOpacity style={styles.loginbuttom}
           onPress={() => {navigation.navigate('login')}} >
-          <Text style={styles.verificetion}>Aller vers connexion</Text>
+          <Text style={{color: '#ffffff', fontWeight: 'bold'}}>Aller vers connexion</Text>
         </TouchableOpacity>
-      </View>
+     
     </View>
   );
 }
 const styles = StyleSheet.create({
   main_container: {
-    backgroundColor: '#E5E5E5',
     flex: 1,
+    flexDirection: 'column',
     width: '100%',
     borderColor: 'black',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  container_header: {
-    flex: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-    //height: 38,
-    width: '100%',
-    backgroundColor: '#fff',
-    borderColor: '#fff',
-    borderRadius: 30,
+    backgroundColor: '#ffffff'
   },
   image: {
     flex: 6,
     width: 250,
     height: 200,
   },
-  container_body: {
-    flex: 3,
-    //height: 400,
-    //paddingLeft: 35,
-    //paddingRight: 35,
+  container_body: {    
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 50,
@@ -67,12 +54,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    color: '#333',
+    color: '#343434',
     fontWeight: 'bold',
-    width: '100%',
-    alignItems: 'flex-start',
-    padding:2,
-    bottom:30,
+    bottom:40,
+
   },
   textetape: {
     color: '#FF7368',
@@ -89,14 +74,13 @@ const styles = StyleSheet.create({
     },
 
   loginbuttom: {
-    top: 100,
-    //left:30,
-    width:"50%",
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: '#140A7E',
-    alignItems: 'center',
-    justifyContent: 'center'
+    marginTop: 40,
+    alignItems:'center',
+    justifyContent: 'center',
+    width:'50%',
+    height:60,
+    borderRadius: 30,
+    backgroundColor:"#21C3A7",
   },
   
 });

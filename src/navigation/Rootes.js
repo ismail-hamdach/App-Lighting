@@ -2,20 +2,44 @@ import React, { useContext, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import firebase from "firebase/app"
 import 'firebase/app'
+import "firebase/firestore";
 
 import { AuthContext } from '../providers/AuthProvider'
 import AuthStack from '../navigation/AuthStack'
-import AppStack from '../navigation/AppStack'
+import AdminStack from '../navigation/AdminStack'
+import ClientStack from '../navigation/ClientStack'
 
 
 
 
 const Rootes = () => {
   
-  const {user,setUser} = useContext(AuthContext);
+  const {user, setUser, role, setRole} = useContext(AuthContext);
 
-  const onAuthStateChanged = (user) => {
-      setUser(user);
+  const getRole = async (uid, roleRetreived) => {
+
+    var role = [];
+    var db = firebase.firestore();
+    await db.collection("users")
+        .where('uid', '==', uid)
+        .get()
+        .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            role = doc.data().role;
+        });
+    });
+    console.log('hello im  here im rendring ' + role)
+    db = null;
+    roleRetreived(role)
+}
+
+  const onAuthStateChanged = async (user) => {
+      setUser(user)
+      setTimeout(() => {
+        if(user) 
+        getRole(user.uid, setRole)
+      }, 50)
+
   }
 
   useEffect(() => {
@@ -27,7 +51,7 @@ const Rootes = () => {
    
     <NavigationContainer>
     
-        { user ? <AppStack/> : <AuthStack/> }
+        { user ? (role === true ?? (role === "admin" ? <AdminStack/> : <ClientStack/>)) : <AuthStack/> }
 
     </NavigationContainer>
    

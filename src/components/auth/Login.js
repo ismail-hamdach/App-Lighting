@@ -1,197 +1,177 @@
-import React, {useContext, useState, useEffect} from 'react'
-import {StyleSheet, TextInput, Text, View, TouchableOpacity, ActivityIndicator } from 'react-native'
+import React, { useEffect, useState, useContext } from 'react'
+import {View, TextInput, StyleSheet, ActivityIndicator, TouchableOpacity, Text, Image, ImageBackground } from 'react-native'
+import { Value } from 'react-native-reanimated';
+
 
 import AuthContext from '../../providers/AuthProvider';
 
-const Login = ({navigation}) => {
+const Login = ({navigation}) =>{
 
-  const {login, err} = useContext(AuthContext);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+    const {login, err} = useContext(AuthContext);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() =>{
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000)
-  }, [])
+    useEffect(() =>{
+        setTimeout(() => {
+        setIsLoading(false);
+        }, 1000)
+    }, [])
 
-  const singin = (email, password) => {
+    const singin = (email, password) => {
    
-    if(email.length >= 1 && password.length >= 1){
-       login(email,password);
-    }
-    
-  }
-
-
-  
-  return ( isLoading ? 
-    <View style={styles.container}>
-      <ActivityIndicator size="large" color="#140A7E" />
-    </View>
-    :
-
-    <View style={styles.main_container}>
-
-
-      <View style={styles.container_body}>
-
-        <Text style={styles.text}> Adresse e-mail </Text>
-        <TextInput
-          placeholder={'Example@mail.example'}
-          style={styles.email_input}
-          onChangeText= {(val) => setEmail(val)}
-        />
+        if(email.length >= 1 && password.length >= 1){
+           login(email,password);
+        }
         
-        <Text style={styles.text}> Mot de passe </Text>
+    }
 
-        <TextInput
-          placeholder={'Mot de passe'}
-          style={styles.email_input}
-          onChangeText= {(val) => setPassword(val)}
-          secureTextEntry={true}
-        />
-
-        <Text style={styles.Danger}>{
-          err
-        }</Text>
-
-        <TouchableOpacity 
-          style={styles.foget_container}
-          onPress={() => navigation.navigate("forget")}  
-        >
-          <Text style={{ color: "orange" }}> Mot de passe oublié ? </Text>
-        </TouchableOpacity>
-
-        <View style={styles.loginbuttom}>
-
-          <TouchableOpacity style={styles.TouchableOpacity}
-            onPress={() => { 
-              singin(email, password); }}
+    return( isLoading ? 
+        <View 
+          style={styles.loading}
           >
-            <Text style={{color: 'white'}}> Connexion </Text>
-          </TouchableOpacity>
-
+          <ActivityIndicator size="large" color="#140A7E" />
         </View>
-      </View>
+        :
+        <View style={styles.container}>
+            <ImageBackground source={require('../../../assets/background.png')} style={styles.image}>
+            <View style={styles.containerHeader}>
+                <Image
+                    style={styles.logo}
+                    source={require('../../../assets/logo.png')}
+                />
+            </View>
+            <View 
+                style={styles.containerBody}
+            >
+                <TextInput
+                    placeholder={'Example@mail.example'}
+                    value= {err?email:null}
+                    style= {styles.input}
+                    onChangeText= {(val) => setEmail(val)}
+                />
+
+                <TextInput
+                    placeholder={'Mot de passe'}
+                    style= {styles.input}
+                    onChangeText= {(val) => setPassword(val)}
+                    secureTextEntry={true}
+                />
+
+                <TouchableOpacity 
+                    style= {styles.forgetPassword}
+                    onPress={() => navigation.navigate("forget")}  
+                    >
+                    <Text style={{ color: "#343434", fontWeight: 'bold' }}> Mot de passe oublié ? </Text>
+                </TouchableOpacity>
+
+                <View style={styles.loginbuttom}>
+
+                    <TouchableOpacity style={styles.TouchableOpacity}
+                        onPress={() => { 
+                            if(email.length >= 1 && password.length >= 1){
+                                setIsLoading(true);
+                                setTimeout(() => {
+                                    setIsLoading(false);
+                                }, 1000);
+                                singin(email, password);
+                            }
+                        }}
+                    >
+                        <Text style={{color: '#ffffff', fontWeight: 'bold'}}> Connexion </Text>
+                    </TouchableOpacity>
+        
+                </View>
+                <Text style={styles.Danger}>{
+                    err
+                }</Text>
+            </View>
+            </ImageBackground>
+            
     </View>
-  );
+    )
 }
 
 const styles = StyleSheet.create({
-  container:{
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  main_container: {
-    backgroundColor:"#E5E5E5",
-    flex:1,
-    width: '100%',
-    borderColor:"black",
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  container_header:{
-    flex:2,
-    alignItems:'center',
-    justifyContent: 'center',
-    //height: 38,
-    width: '100%',
-    backgroundColor:"#fff",
-    borderColor:"#fff",
-    borderRadius: 30
-
-  },
-  image:{
-    flex: 6,
-    width:200,
-    height:200
-  },
-  container_body:{
-    flex: 3,
-    //height: 400,
-    paddingLeft:35,
-    paddingRight:35,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 50
-  },
-  h1:{
-    flex: 1,
-    color : "#333",
-    fontFamily:"sans-serif",
-    fontWeight: 'bold',
-  },
-  text:{
-    color : "#333",
-    marginTop: 1,
-    fontWeight: 'bold',
-    width: '100%',
-    alignItems: 'flex-start'
-  },
-  email_input:{
-    borderBottomWidth:1,
-    height:42,
-    width:"100%"
-  },
-  password_text:{
-    marginTop: 10,
-    color : "gray"
-  },
-  password_input:{
-    borderBottomWidth:1,
-    height: 42,
-    width: "80%"
-  },
-  foget_container:{
-    
-  },
-  Danger:{
-    color: "red"
-  },
-  TouchableOpacity:{
-    
-    width:314,
-    height:60,
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: 'white'
-
-  },
-  forget_text:{
-    color: "white"
-  },
-  hide: {
-    display: 'none'
-  },
-  show: {
-    display: 'flex'
-  },
-  email_input: {
-    borderBottomColor:'#000',
-    color:"gray",
-    borderBottomWidth:1,
-    height:45,
-    width: '100%',
-    bottom: 10,
-    
-  },
+    container: {
+        flex: 1,
+        flexDirection: "column"
+    },
+    loading:{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    main_container: {
+      backgroundColor:"#E5E5E5",
+      flex:3,
+      width: '100%',
+      borderColor:"black",
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    containerHeader:{
+      flex:1,
+      alignItems:'flex-end',
+    //   justifyContent: 'center',
+    //   height: 38,
+      width: '90%',
+    },
+    image: {
+        flex: 1,
+        resizeMode: "cover",
+        justifyContent: "center",
+        alignItems: 'center',
+    },
+    logo:{
+        marginTop: '5%',
+        width: '50%',
+        height: '50%',
+        borderRadius: 15,
+    },
+    containerBody:{
+      flex: 3,
+      width: '80%',
+      alignItems: 'center',
+    },
+    input:{
+      borderBottomWidth:1,
+      height:42,
+      width:"100%",
+      borderWidth: 1,
+      borderRadius: 15,
+      backgroundColor: "#ffff",
+      borderColor: "#045C64",
+      paddingLeft: 15,
+      marginTop: 30,
+    },
+    forgetPassword:{
+        marginTop: '1%',
+        alignSelf: 'flex-start',
+    },
+    password_text:{
+      marginTop: 10,
+      color : "gray"
+    },
+    password_input:{
+      borderBottomWidth:1,
+      height: 42,
+      width: "80%"
+    },
+    Danger:{
+        marginTop: '2%',
+      color: "red"
+    },
+    loginbuttom: {
+      marginTop: 40,
+      alignItems:'center',
+      justifyContent: 'center',
+      width:'50%',
+      height:60,
+      borderRadius: 30,
+      backgroundColor:"#21C3A7",
+    }
   
-  loginbuttom: {
-    marginTop: 30,
-    alignItems:'center',
-    justifyContent: 'center',
-    width:'80%',
-    height:60,
-    borderRadius:30,
-    backgroundColor:"#140A7E",
-    color: 'white'
-  }
-
-})
+  })
 
 export default Login

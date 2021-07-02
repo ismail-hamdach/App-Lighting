@@ -17,17 +17,14 @@ const ForgetPass = ({navigation}) => {
 
   return (
     <View style={styles.main_container}>
-      
-
-      <View style={styles.container_body}>
         <Text style={styles.textetape}> Etape 1 </Text>
-        <Text style={styles.text}> Veuillez saisir votre adresse e-mail pour rechercher votre compte. </Text>
+        <Text style={styles.text}> Veuillez saisir votre adresse e-mail</Text>
         <TextInput
           placeholder={'Example@mail.example'}
           style={styles.email_input}
           onChangeText= {(val) => setEmail(val)}
         />
-        <Text style={{color: 'red'}}>{err}</Text>
+        
         <TouchableOpacity style={styles.loginbuttom} 
           onPress={ async () => {
             try{
@@ -37,35 +34,21 @@ const ForgetPass = ({navigation}) => {
                 setErr(e.message);
             }}}
         >
-          <Text style={styles.verificetion}> Vérifiez </Text>
+          <Text style={{color: '#ffffff', fontWeight: 'bold'}}> Vérifiez  </Text>
         </TouchableOpacity>
-      </View>
+        <Text style={{color: 'red', marginTop: '10%'}}>{err}</Text>
     </View>
   );
 }
 const styles = StyleSheet.create({
   main_container: {
-    backgroundColor: '#E5E5E5',
     flex: 1,
     flexDirection: 'column',
     width: '100%',
     borderColor: 'black',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  container_header: {
-    flex: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    backgroundColor: '#fff',
-    borderColor: '#fff',
-    borderRadius: 30,
-  },
-  image: {
-    flex: 6,
-    width: 250,
-    height: 200,
+    backgroundColor: '#ffffff'
   },
   container_body: {
     flex: 3,
@@ -103,22 +86,26 @@ const styles = StyleSheet.create({
     borderRadius:3,   
     },
   email_input: {
-    borderBottomColor:'#000',
-    color:"gray",
     borderBottomWidth:1,
-    height:45,
-    width: '80%',
-    bottom: 10,
-    
+    height:42,
+    width:"80%",
+    borderWidth: 1,
+    borderRadius: 15,
+    backgroundColor: "#ffff",
+    borderColor: "#045C64",
+    paddingLeft: 15,
+    marginTop: 30,
+  
   },
 
   loginbuttom: {
-    top: 10,
-    alignItems: 'center',
-    width:150,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: '#140A7E',
+    marginTop: 40,
+    alignItems:'center',
+    justifyContent: 'center',
+    width:'50%',
+    height:60,
+    borderRadius: 30,
+    backgroundColor:"#21C3A7",
   },
   
 });

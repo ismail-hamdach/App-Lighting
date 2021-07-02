@@ -17,8 +17,9 @@ export const AuthProvider = ({children}) => {
     
     const [user, setUser] = useState(null);
     const [err, setErr] = useState(null);
+    const [role, setRole] = useState(null);
     if (!firebase.apps.length){
-    firebase.initializeApp(firebaseConfig);
+        firebase.initializeApp(firebaseConfig);
     }
       //---------------------------------------------------------------------------------------------------------------------------------------------------------------
     
@@ -28,7 +29,10 @@ export const AuthProvider = ({children}) => {
             setUser,
             err,
             setErr,
+            role,
+            setRole,
             login: async (email, password) => {
+                setUser(email)
                 try{
                     await firebase.auth().signInWithEmailAndPassword(email, password);
                     setErr("");
