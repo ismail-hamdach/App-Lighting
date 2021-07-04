@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
-import {View, TextInput, StyleSheet, ActivityIndicator, TouchableOpacity, Text, Image, ImageBackground } from 'react-native'
+import {View, SafeAreaView, ScrollView ,TextInput, StyleSheet, ActivityIndicator, TouchableOpacity, Text, Image, ImageBackground } from 'react-native'
 import { Value } from 'react-native-reanimated';
 
 
@@ -33,62 +33,68 @@ const Login = ({navigation}) =>{
           <ActivityIndicator size="large" color="#140A7E" />
         </View>
         :
-        <View style={styles.container}>
+        <SafeAreaView  style={styles.container}>
             <ImageBackground source={require('../../../assets/background.png')} style={styles.image}>
-            <View style={styles.containerHeader}>
-                <Image
-                    style={styles.logo}
-                    source={require('../../../assets/logo.png')}
-                />
-            </View>
-            <View 
-                style={styles.containerBody}
-            >
-                <TextInput
-                    placeholder={'Example@mail.example'}
-                    value= {err?email:null}
-                    style= {styles.input}
-                    onChangeText= {(val) => setEmail(val)}
-                />
-
-                <TextInput
-                    placeholder={'Mot de passe'}
-                    style= {styles.input}
-                    onChangeText= {(val) => setPassword(val)}
-                    secureTextEntry={true}
-                />
-
-                <TouchableOpacity 
-                    style= {styles.forgetPassword}
-                    onPress={() => navigation.navigate("forget")}  
-                    >
-                    <Text style={{ color: "#343434", fontWeight: 'bold' }}> Mot de passe oublié ? </Text>
-                </TouchableOpacity>
-
-                <View style={styles.loginbuttom}>
-
-                    <TouchableOpacity style={styles.TouchableOpacity}
-                        onPress={() => { 
-                            if(email.length >= 1 && password.length >= 1){
-                                setIsLoading(true);
-                                setTimeout(() => {
-                                    setIsLoading(false);
-                                }, 3000);
-                                singin(email, password);
-                            }
-                        }}
-                    >
-                        <Text style={{color: '#ffffff', fontWeight: 'bold'}}> Connexion </Text>
-                    </TouchableOpacity>
-        
+            
+                <ScrollView style={{ width: '100%', }} contentContainerStyle={{ justifyContent: 'center', alignItems: 'center', flex: 1}}>
+                <View style={styles.containerHeader}>
+                    <Image
+                        style={styles.logo}
+                        source={require('../../../assets/logo.png')}
+                    />
                 </View>
-                <Text style={styles.Danger}>{
-                    err
-                }</Text>
-            </View>
+                
+                <View 
+                    style={styles.containerBody}
+                >
+                    <TextInput
+                        placeholder={'Example@mail.example'}
+                        value= {err?email:null}
+                        style= {styles.input}
+                        onChangeText= {(val) => setEmail(val)}
+                    />
+
+                    <TextInput
+                        placeholder={'Mot de passe'}
+                        style= {styles.input}
+                        onChangeText= {(val) => setPassword(val)}
+                        secureTextEntry={true}
+                    />
+
+                    <TouchableOpacity 
+                        style= {styles.forgetPassword}
+                        onPress={() => navigation.navigate("forget")}  
+                        >
+                        <Text style={{ color: "#343434", fontWeight: 'bold' }}> Mot de passe oublié ? </Text>
+                    </TouchableOpacity>
+
+                    <View style={styles.loginbuttom}>
+
+                        <TouchableOpacity style={styles.TouchableOpacity}
+                            onPress={() => { 
+                                if(email.length >= 1 && password.length >= 1){
+                                    setIsLoading(true);
+                                    setTimeout(() => {
+                                        setIsLoading(false);
+                                    }, 3000);
+                                    singin(email, password);
+                                }
+                            }}
+                        >
+                            <Text style={{color: '#ffffff', fontWeight: 'bold'}}> Connexion </Text>
+                        </TouchableOpacity>
+            
+                    </View>
+                    <Text style={styles.Danger}>{
+                        err
+                    }</Text>
+                </View>
+            
+                </ScrollView>
+                
             </ImageBackground>
             
-    </View>
+    </SafeAreaView>
     )
 }
 

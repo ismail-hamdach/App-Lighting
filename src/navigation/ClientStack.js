@@ -2,10 +2,11 @@ import React, { useContext } from 'react';
 import { View, TouchableOpacity, Text } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack';
 
-import DashBoard from "../components/admin/DashBoard"
+import Camera from "../components/camera/Camera"
 import Register from "../components/client/Register"
 
 import {AuthContext} from '../providers/AuthProvider'
+
 
 const stack = createStackNavigator();
 
@@ -15,14 +16,15 @@ const AuthStack = () => {
 
   return (
       
-      <stack.Navigator initialRouteName="DashBoard" 
-      screenOptions={{
-        headerTintColor: 'white',
-        headerStyle: { backgroundColor: '#21C3A7' },
-        headerTitleStyle: {
-          fontWeight: 'bold'
-        }
-      }}>
+      
+        <stack.Navigator initialRouteName="DashBoard" 
+          screenOptions={{
+            headerTintColor: 'white',
+            headerStyle: { backgroundColor: '#21C3A7' },
+            headerTitleStyle: {
+              fontWeight: 'bold'
+            }
+          }}>
          <stack.Screen name="Register" component={Register} options={{
           headerRight: () => (
             <View style={{width: '100%', marginRight: 5 ,}}>
@@ -38,7 +40,9 @@ const AuthStack = () => {
             
           ),
         }}/> 
+        <stack.Screen name="Camera" component={Camera} /> 
       </stack.Navigator>
+     
         
   );
 

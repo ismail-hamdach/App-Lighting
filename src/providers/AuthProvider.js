@@ -18,6 +18,7 @@ export const AuthProvider = ({children}) => {
     const [user, setUser] = useState(null);
     const [err, setErr] = useState(null);
     const [role, setRole] = useState('none');
+    
     if (!firebase.apps.length){
         firebase.initializeApp(firebaseConfig);
     }
@@ -31,6 +32,7 @@ export const AuthProvider = ({children}) => {
             setErr,
             role,
             setRole,
+            
             login: async (email, password) => {
                 setUser(email)
                 try{
@@ -52,7 +54,10 @@ export const AuthProvider = ({children}) => {
             },
             logOut: async () => {
                 try{
-                    await firebase.auth().signOut();
+                    await firebase.auth().signOut().then(() => {
+                        setRole("none");
+                    }
+                    )
                     console.log("log out");
                     setErr("");
                 }catch(e){

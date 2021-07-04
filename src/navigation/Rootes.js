@@ -8,6 +8,7 @@ import { AuthContext } from '../providers/AuthProvider'
 import AuthStack from '../navigation/AuthStack'
 import AdminStack from '../navigation/AdminStack'
 import ClientStack from '../navigation/ClientStack'
+import Loading from '../components/effects/Loading';
 
 
 
@@ -50,7 +51,7 @@ const Rootes = () => {
   return (
     <NavigationContainer>
     
-        { user ? (role !== 'none' ? (role === "admin" ? <AdminStack/> : <ClientStack/>) : <AuthStack/>) : <AuthStack/> }
+        { user ? (role !== 'none' ? (role === "admin" ? <AdminStack/> : <ClientStack/>) : <Loading/>) : <AuthStack/> }
 
     </NavigationContainer>
    
