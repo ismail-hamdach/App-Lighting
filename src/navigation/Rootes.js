@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import firebase from "firebase/app"
 import 'firebase/app'
@@ -16,7 +16,10 @@ import Loading from '../components/effects/Loading';
 const Rootes = () => {
   
   const {user, setUser, role, setRole} = useContext(AuthContext);
-  
+  const [initializing, setInitializing] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
+
   const getRole = async (uid, roleRetreived) => {
 
     var role = [];
@@ -29,17 +32,23 @@ const Rootes = () => {
             role = doc.data().role;
         });
     });
-    console.log('hello im  here im rendring ' + role)
+  
     db = null;
     roleRetreived(role)
-}
+  }
 
   const onAuthStateChanged = async (user) => {
-      setUser(user)
-      setTimeout(() => {
-        if(user) 
-        getRole(user.uid, setRole)
-      }, 20)
+      setUser(user);
+      if(initializing) setInitializing(false);
+      // setTimeout(() => {
+      //   if(user) 
+      //   getRole(user.uid, setRole)
+      // }, 20)
+      if(user){
+        setIsLoading(true);
+        await getRole(user.uid, setRole);
+        setIsLoading(false);
+      }
 
   }
 
@@ -48,10 +57,23 @@ const Rootes = () => {
     return subscriber;                                    
   }, [user])
 
+  // useEffect(() => {
+  //   async () => {
+  //     setIsLoading(true);
+  //     await getRole();
+  //     setIsLoading(false);
+  //   }
+  // }, [])
+
+
+  if (initializing) return null;
+
   return (
     <NavigationContainer>
     
-        { user ? (role !== 'none' ? (role === "admin" ? <AdminStack/> : <ClientStack/>) : <Loading/>) : <AuthStack/> }
+        {/* { user ? (role !== 'none' ? (role === "admin" ? <AdminStack/> : <ClientStack/>) : <Loading/>) : <AuthStack/> } */}
+
+        { user ? (!isLoading  ? (role === "admin" ? <AdminStack/> : <ClientStack/>) : <Loading/>) : <AuthStack/> }
 
     </NavigationContainer>
    
