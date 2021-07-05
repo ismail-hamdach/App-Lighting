@@ -3,9 +3,11 @@ import firebase from 'firebase/app'
 import "firebase/auth";
 
 
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
+    
     var firebaseConfig = {
         apiKey: "AIzaSyBqfcQuhkB6GwcFZB_1lt5p8tvCv4iPpEA",
         authDomain: "app-lamps.firebaseapp.com",
@@ -17,7 +19,7 @@ export const AuthProvider = ({children}) => {
     
     const [user, setUser] = useState(null);
     const [err, setErr] = useState(null);
-    const [role, setRole] = useState('none');
+    const [role, setRole] = useState(null);
     
     if (!firebase.apps.length){
         firebase.initializeApp(firebaseConfig);
@@ -55,7 +57,7 @@ export const AuthProvider = ({children}) => {
             logOut: async () => {
                 try{
                     await firebase.auth().signOut().then(() => {
-                        setRole("none");
+                        setRole(null);
                     }
                     )
                     console.log("log out");

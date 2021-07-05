@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import {View, Text, ActivityIndicator, StyleSheet, Button, Alert, TouchableOpacity, TextInput, SafeAreaView, Image, ScrollView } from 'react-native'
 import * as ImagePicker from 'expo-image-picker';
-
-import Loading from '../effects/Loading'
-
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import firebase from "firebase/app"
 import 'firebase/app'
 import "firebase/firestore";
 import "firebase/storage";
 
+import Loading from '../effects/Loading'
 
 
+const Home = () =>{
+  // for some tests
+  const [cameraOpen, setCameraOpen] = useState(false);
+  const [progress, setProgress ] = useState(0);
+  const [counter, setCounter ] = useState(0);
 
-const Home = ({navigation, route}) =>{
-  const [isLoading, setIsLoading] = useState(true);
   // this states for inputs
   const [NP, setNP] = useState(null);
   const [type, setType] = useState({text: '', uri: null});
@@ -25,10 +26,7 @@ const Home = ({navigation, route}) =>{
   const [AC, setAC] = useState({text: '', uri: null});
   const [geocalization, setGeocalization] = useState(null);
   const [etat, setEtat] = useState(false);
-  // for some tests
-  const [cameraOpen, setCameraOpen] = useState(false);
-  const [progress, setProgress ] = useState(0);
-  const [counter, setCounter ] = useState(0);
+  
 
    
   // Alert before submiting
@@ -63,19 +61,7 @@ const Home = ({navigation, route}) =>{
     setCameraOpen(false);
   }
   
-  useEffect(() => {
-  //   navigation.setOptions({
-  //     headerShown: false
-  //   })
-  //   setTimeout(() =>{ 
-      setIsLoading(false)
-  //     navigation.setOptions({
-  //       headerShown: true
-  //     })
-      
-  //   }, 10)
-  //   cam[-1] = {uri: null}
-  }, [])
+  
 
   // to uplaod a picture
   const submitPictures =  async(pic) => {
@@ -212,9 +198,7 @@ const Home = ({navigation, route}) =>{
     }
   }
 
-return(isLoading ? 
-    <Loading />
-  :
+return(
     cameraOpen ?
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <ActivityIndicator size="large" color="3d3d3d" />

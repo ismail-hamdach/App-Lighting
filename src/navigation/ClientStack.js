@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { View, TouchableOpacity, Text } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Camera from "../components/camera/Camera"
 import Register from "../components/client/Register"
 
 import {AuthContext} from '../providers/AuthProvider'
@@ -25,6 +24,7 @@ const AuthStack = () => {
               fontWeight: 'bold'
             }
           }}>
+
          <stack.Screen name="Register" component={Register} options={{
           headerRight: () => (
             <View style={{width: '100%', marginRight: 5 ,}}>
@@ -37,10 +37,9 @@ const AuthStack = () => {
                 >Se Déconnécter</Text>
               </TouchableOpacity>
             </View>
-            
           ),
         }}/> 
-        <stack.Screen name="Camera" component={Camera} /> 
+
       </stack.Navigator>
      
         

@@ -7,10 +7,12 @@ import firebase from "firebase/app"
 import 'firebase/app'
 import "firebase/firestore";
 
+import Loading from '../effects/Loading'
+
 const DashBoard = ({navigation}) => {
   const [isLoading, setIsLoading] = useState(true);
  
-
+  
   const [data, setData] = useState([
       {
           key: 1,
@@ -93,6 +95,7 @@ const DashBoard = ({navigation}) => {
     dataRetrieved(data)
   }
 
+  //Chart
   const Labels = ({ slices }) => {
     return slices.map((slice, index) => {
         const { pieCentroid, data } = slice;
@@ -127,9 +130,7 @@ const DashBoard = ({navigation}) => {
   }, [])
 
   return (isLoading ? 
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <ActivityIndicator size="large" color="#140A7E" />
-    </View>
+    <Loading />
   :
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       

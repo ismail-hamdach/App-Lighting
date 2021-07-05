@@ -17,9 +17,9 @@ const Rootes = () => {
   
   const {user, setUser, role, setRole} = useContext(AuthContext);
   const [initializing, setInitializing] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-
+  //Fetch role of the user
   const getRole = async (uid, roleRetreived) => {
 
     var role = [];
@@ -37,43 +37,30 @@ const Rootes = () => {
     roleRetreived(role)
   }
 
+  //listener to user's state
   const onAuthStateChanged = async (user) => {
+      setIsLoading(true);
       setUser(user);
       if(initializing) setInitializing(false);
-      // setTimeout(() => {
-      //   if(user) 
-      //   getRole(user.uid, setRole)
-      // }, 20)
       if(user){
-        setIsLoading(true);
         await getRole(user.uid, setRole);
-        setIsLoading(false);
       }
-
+      setIsLoading(false);
   }
 
   useEffect(() => {
+    setIsLoading(true);
     const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
+    setIsLoading(false);
     return subscriber;                                    
   }, [user])
-
-  // useEffect(() => {
-  //   async () => {
-  //     setIsLoading(true);
-  //     await getRole();
-  //     setIsLoading(false);
-  //   }
-  // }, [])
-
 
   if (initializing) return null;
 
   return (
     <NavigationContainer>
-    
-        {/* { user ? (role !== 'none' ? (role === "admin" ? <AdminStack/> : <ClientStack/>) : <Loading/>) : <AuthStack/> } */}
 
-        { user ? (!isLoading  ? (role === "admin" ? <AdminStack/> : <ClientStack/>) : <Loading/>) : <AuthStack/> }
+        { user ? (!isLoading  ? (role === "admin" ? <AdminStack/> : (role ? <ClientStack/> : <Loading />)) : <Loading/>) : <AuthStack/> }
 
     </NavigationContainer>
    
