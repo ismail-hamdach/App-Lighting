@@ -1,22 +1,22 @@
 import React, { useEffect, useState, useContext } from 'react'
 import {View, SafeAreaView, ScrollView ,TextInput, StyleSheet, ActivityIndicator, TouchableOpacity, Text, Image, ImageBackground } from 'react-native'
-import { Value } from 'react-native-reanimated';
+import Loading  from '../effects/Loading';
 
 
 import AuthContext from '../../providers/AuthProvider';
 
 const Login = ({navigation}) =>{
 
-    const {login, err} = useContext(AuthContext);
+    const {login, err, user} = useContext(AuthContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(() =>{
-        setTimeout(() => {
-        setIsLoading(false);
-        }, 1000)
-    }, [])
+    // useEffect(() =>{
+    //     setTimeout(() => {
+    //     setIsLoading(false);
+    //     }, 1000)
+    // }, [])
 
     const singin = (email, password) => {
    
@@ -26,17 +26,22 @@ const Login = ({navigation}) =>{
         
     }
 
+    useEffect(() => {
+        setIsLoading(true);
+        setTimeout(() => {
+            setIsLoading(false)
+        }, 1000)
+    }, [])
+
     return( isLoading ? 
-        <View 
-          style={styles.loading}
-          >
-          <ActivityIndicator size="large" color="#140A7E" />
-        </View>
+        <Loading />
         :
         <SafeAreaView  style={styles.container}>
+            
             <ImageBackground source={require('../../../assets/background.png')} style={styles.image}>
             
                 <ScrollView style={{ width: '100%', }} contentContainerStyle={{ justifyContent: 'center', alignItems: 'center', flex: 1}}>
+                
                 <View style={styles.containerHeader}>
                     <Image
                         style={styles.logo}
@@ -71,13 +76,11 @@ const Login = ({navigation}) =>{
                     <View style={styles.loginbuttom}>
 
                         <TouchableOpacity style={styles.TouchableOpacity}
-                            onPress={() => { 
+                            onPress={async () => { 
                                 if(email.length >= 1 && password.length >= 1){
                                     setIsLoading(true);
-                                    setTimeout(() => {
-                                        setIsLoading(false);
-                                    }, 3000);
-                                    singin(email, password);
+                                    await singin(email, password);
+                                    setIsLoading(false);
                                 }
                             }}
                         >
@@ -85,16 +88,17 @@ const Login = ({navigation}) =>{
                         </TouchableOpacity>
             
                     </View>
-                    <Text style={styles.Danger}>{
-                        err
-                    }</Text>
+                    <Text style={styles.Danger}>
+                        {err}
+                    </Text>
+                
                 </View>
             
                 </ScrollView>
                 
             </ImageBackground>
             
-    </SafeAreaView>
+        </SafeAreaView>
     )
 }
 
@@ -125,7 +129,7 @@ const styles = StyleSheet.create({
     },
     image: {
         flex: 1,
-        resizeMode: "cover",
+        resizeMode: '',
         justifyContent: "center",
         alignItems: 'center',
     },
