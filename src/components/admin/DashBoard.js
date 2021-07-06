@@ -121,12 +121,14 @@ const DashBoard = ({navigation}) => {
     //To get data at first time to impliment loading effect
     await getAnalyseOnce(setData);
     //To lunch the listener
-    await getAnalyse(setData);
+    let subscriber = await getAnalyse(setData);
     setIsLoading(false);
+    return subscriber;
   }
 
   useEffect( () => {
-    open()
+    let subscriber = open();
+    // return subscriber;
   }, [])
 
   return (isLoading ? 

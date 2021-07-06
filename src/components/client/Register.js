@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import {View, Text, ActivityIndicator, StyleSheet, Button, Alert, TouchableOpacity, TextInput, SafeAreaView, Image, ScrollView } from 'react-native'
 import * as ImagePicker from 'expo-image-picker';
+import * as Location from 'expo-location';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import firebase from "firebase/app"
 import 'firebase/app'
@@ -15,6 +16,7 @@ const Home = () =>{
   const [cameraOpen, setCameraOpen] = useState(false);
   const [progress, setProgress ] = useState(0);
   const [counter, setCounter ] = useState(0);
+  const [picWeight, setPicWeight] = useState(false);
 
   // this states for inputs
   const [NP, setNP] = useState(null);
@@ -29,45 +31,46 @@ const Home = () =>{
   
 
    
-  // Alert before submiting
-  const createTwoButtonAlert = () =>
+  // Custom alert with title , message and action
+  const createTwoButtonAlert = (titre, message, callback) =>
     Alert.alert(
-      "Enregistrement",
-      "Vous avez sure!",
+      titre,
+      message,
       [
         {
-          text: "Cancel",
+          text: "Annuler",
           onPress: () => console.log("Cancel Pressed"),
           style: "cancel"
         },
-        { text: "OK", onPress:async () => {
-          await submit()
-        } }
+        { text: "Oui", onPress:callback }
       ]
   );
-  
+    
   // Submit function
   const submit = async () => {
-    setCameraOpen(true);
-    await submitPictures(photo);
-    await submitPictures(type);
-    await submitPictures(AP);
-    await submitPictures(ACB);
-    await submitPictures(AC);
-    await submitPictures(AL);
-    // await getPoteauObject(setPoteau)
-    console.log('Transition');
-    await ajouterPoteau();
-    setCameraOpen(false);
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status === 'granted') {
+      let location = await Location.getCurrentPositionAsync({});
+      setGeocalization(location);
+      setCameraOpen(true);
+      await submitPictures(photo);
+      await submitPictures(type);
+      await submitPictures(AP);
+      await submitPictures(ACB);
+      await submitPictures(AC);
+      await submitPictures(AL);
+      await ajouterPoteau();
+      setCameraOpen(false);
+    }else{
+      alert("Sorry, we need Localisation permissions to make this work!");
+    }
   }
   
-  
-
   // to uplaod a picture
   const submitPictures =  async(pic) => {
     const upLoadUri = pic;
     if(pic.uri){
-      console.log('I"m counter '+counter)
+      console.log('I"m counter '+ counter)
       let uri = upLoadUri.uri;
     let filename = uri.substring(uri.lastIndexOf('/') + 1)
     // setIsLoading(true)
@@ -80,8 +83,9 @@ const Home = () =>{
       var uploadTask = db.put(blob)
       uploadTask.on('state_changed', 
         (snapshot) => {
+          if(!picWeight)
+            setPicWeight(snapshot.totalBytes/1024);
           setProgress(((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(2));
-
           var progression = ((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(2);
           console.log('Upload is ' + progression + '% done');
 
@@ -98,7 +102,6 @@ const Home = () =>{
           // Handle unsuccessful uploads
         }, 
         () => {
-          
             
         }
       );
@@ -111,7 +114,9 @@ const Home = () =>{
         console.log('File available at', downloadURL);
         upLoadUri.uri = downloadURL;
         setPhoto(upLoadUri);
-        
+        setCounter(prevCount => prevCount + 1);
+        setProgress(0);
+        setPicWeight(null);
         
         // setCameraOpen(false)
         // setIsLoading(false)
@@ -148,7 +153,6 @@ const Home = () =>{
         let images = pic;
         images.uri =  result.uri
         setPic(images);
-        console.log(pic);
       }
     }else{
       alert('Sorry, we need camera roll permissions to make this work!')
@@ -186,7 +190,8 @@ const Home = () =>{
     .then(() => {
         alert("Document successfully written!");
         console.log("Document successfully written!");
-        
+        setCounter(0);
+        setProgress(0);        
     })
     .catch((error) => {
         alert("Error writing document: ", error);
@@ -201,16 +206,16 @@ const Home = () =>{
 return(
     cameraOpen ?
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <ActivityIndicator size="large" color="3d3d3d" />
+      <ActivityIndicator size="large" color="#3d3d3d" />
       <Text style={styles.text2}>
-        Upload is {progress} % done
+       {picWeight ? '('+picWeight.toFixed(2) + 'KB)' : null} Upload is {progress} % done ({counter})
       </Text>
-      <TouchableOpacity  style={{backgroundColor: '#3d3d3d', width: '40%', padding: 5, borderRadius: 15, alignSelf: 'center', alignContent: 'center'}} onPress={() => {
-                clearStates();
-              }}
-              >
-                <Text style={styles.text}>Cacher</Text>
-              </TouchableOpacity>
+      <View  style={{backgroundColor: '#fff', width: '40%',  borderRadius: 15, alignSelf: 'center', alignContent: 'center'}}
+        >
+          <View style={{width: ''+progress+'%', backgroundColor: '#3d3d3d', padding: '5%', borderRadius: 15,}}>
+            
+          </View>
+      </View>
 
     </View>
   : 
@@ -374,13 +379,13 @@ return(
             <View style={styles.row} >
 
               <TouchableOpacity  style={{backgroundColor: '#3d3d3d', width: '40%', padding: 5, borderRadius: 15, alignSelf: 'center', alignContent: 'center'}} onPress={() => {
-                if(NP && photo && AL.text != '' && AP.text != '' && ACB.text != '' && AC.text != '')
+                if(NP && photo.uri && AL.text != '' && AP.text != '' && ACB.text != '' && AC.text != '')
                 {
-                  createTwoButtonAlert()
+                  createTwoButtonAlert("Enregistrement", "Vous avez sure!", async () => {
+                    await submit()
+                  })
                   
                 }else{
-                  
-                  // console.log(poteauObject)
                   alert("Remplissez les champs! \nPhoto de point est obligatior !")
                 }
               }}
@@ -389,7 +394,7 @@ return(
               </TouchableOpacity>
 
               <TouchableOpacity  style={{backgroundColor: '#3d3d3d', width: '40%', padding: 5, borderRadius: 15, alignSelf: 'center', alignContent: 'center'}} onPress={() => {
-                clearStates()
+                createTwoButtonAlert("Effacer", "Vous avez sure!",() => clearStates());
               }}
               >
                 <Text style={styles.text}>Effacer</Text>
