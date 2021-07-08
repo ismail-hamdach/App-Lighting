@@ -60,7 +60,7 @@ const Rootes = () => {
   return (
     <NavigationContainer>
 
-        { user ? (!isLoading  ? (role === "admin" ? <AdminStack/> : (role ? <ClientStack/> : <Loading />)) : <Loading/>) : <AuthStack/> }
+        { user ? (isLoading  ? <Loading/> : (role === "admin" ? <AdminStack/> : (role ? <ClientStack/> : <Loading />)) ) : <AuthStack/> }
 
     </NavigationContainer>
    

@@ -28,13 +28,6 @@ const Login = ({navigation}) =>{
 
     const window = useWindowDimensions();
 
-    useEffect(() => {
-        setIsLoading(true);
-        setTimeout(() => {
-            setIsLoading(false)
-        }, 1000)
-    }, [])
-
     return( isLoading ? 
         <Loading />
         :
@@ -86,7 +79,7 @@ const Login = ({navigation}) =>{
                             onPress={async () => { 
                                 if(email.length >= 1 && password.length >= 1){
                                     setIsLoading(true);
-                                    await singin(email, password);
+                                    singin(email, password);
                                     setIsLoading(false);
                                 }
                             }}
