@@ -20,6 +20,8 @@ export const AuthProvider = ({children}) => {
     const [user, setUser] = useState(null);
     const [err, setErr] = useState(null);
     const [role, setRole] = useState(null);
+    const [isLoadingOnLogin, setIsloading] = useState(false);
+    
     
     if (!firebase.apps.length){
         firebase.initializeApp(firebaseConfig);
@@ -34,9 +36,11 @@ export const AuthProvider = ({children}) => {
             setErr,
             role,
             setRole,
+            isLoadingOnLogin,
             
             login: async (email, password) => {
                 setUser(email)
+                setIsloading(true);
                 try{
                     await firebase.auth().signInWithEmailAndPassword(email, password);
                     setErr("");
@@ -44,6 +48,7 @@ export const AuthProvider = ({children}) => {
                     console.log(e);
                     setErr(e.message);
                 }
+                setIsloading(false);
             },
             register: async (email, password) => {
                 try{

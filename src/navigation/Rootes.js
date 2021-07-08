@@ -15,7 +15,7 @@ import Loading from '../components/effects/Loading';
 
 const Rootes = () => {
   
-  const {user, setUser, role, setRole} = useContext(AuthContext);
+  const {user, setUser, role, setRole, isLoadingOnLogin} = useContext(AuthContext);
   const [initializing, setInitializing] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -48,6 +48,7 @@ const Rootes = () => {
       setIsLoading(false);
   }
 
+
   useEffect(() => {
     setIsLoading(true);
     const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
@@ -60,7 +61,7 @@ const Rootes = () => {
   return (
     <NavigationContainer>
 
-        { user ? (isLoading  ? <Loading/> : (role === "admin" ? <AdminStack/> : (role ? <ClientStack/> : <Loading />)) ) : <AuthStack/> }
+        {!isLoadingOnLogin ?( user ? (isLoading  ? <Loading/> : (role === "admin" ? <AdminStack/> : (role ? <ClientStack/> : <Loading />)) ) : <AuthStack/> ) : <Loading />}
 
     </NavigationContainer>
    
