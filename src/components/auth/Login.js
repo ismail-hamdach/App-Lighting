@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
-import {View, SafeAreaView, ScrollView ,TextInput, StyleSheet, ActivityIndicator, TouchableOpacity, Text, Image, ImageBackground } from 'react-native'
+import {View, SafeAreaView, ScrollView ,TextInput, StyleSheet, ActivityIndicator, TouchableOpacity, Text, Image, ImageBackground, useWindowDimensions } from 'react-native'
 import Loading  from '../effects/Loading';
 
 
@@ -26,6 +26,8 @@ const Login = ({navigation}) =>{
         
     }
 
+    const window = useWindowDimensions();
+
     useEffect(() => {
         setIsLoading(true);
         setTimeout(() => {
@@ -38,20 +40,25 @@ const Login = ({navigation}) =>{
         :
         <SafeAreaView  style={styles.container}>
             
-            <ImageBackground source={require('../../../assets/background.png')} style={styles.image}>
+            <ImageBackground source={require('../../../assets/background.png')} style={{
+                flex: 1,
+                resizeMode: 'stretch',
+                width: window.width,
+                height: window.height,
+            }}>
             
                 <ScrollView style={{ width: '100%', }} contentContainerStyle={{ justifyContent: 'center', alignItems: 'center', flex: 1}}>
                 
                 <View style={styles.containerHeader}>
-                    <Image
-                        style={styles.logo}
-                        source={require('../../../assets/logo.png')}
-                    />
-                </View>
-                
-                <View 
-                    style={styles.containerBody}
-                >
+                        <Image
+                            style={styles.logo}
+                            source={require('../../../assets/logo.png')}
+                        />
+                    </View>
+                    
+                    <View 
+                        style={styles.containerBody}
+                    >
                     <TextInput
                         placeholder={'Example@mail.example'}
                         value= {err?email:null}
@@ -105,7 +112,7 @@ const Login = ({navigation}) =>{
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        flexDirection: "column"
+        
     },
     loading:{
         flex: 1,
@@ -123,18 +130,20 @@ const styles = StyleSheet.create({
     containerHeader:{
       flex:1,
       alignItems:'flex-end',
-    //   justifyContent: 'center',
-    //   height: 38,
-      width: '90%',
+      position: 'absolute',
+      top: 30,
+      right: 20,
+      height: 200.9,
+      width: 400,
     },
     image: {
         flex: 1,
-        resizeMode: 'cover',
-        justifyContent: "center",
-        alignItems: 'center',
+        resizeMode: 'stretch',
+        width: window.width,
+        height: window.height,
     },
     logo:{
-        marginTop: '5%',
+        // marginTop: '5%',
         width: '50%',
         height: '50%',
         borderRadius: 15,
@@ -143,6 +152,8 @@ const styles = StyleSheet.create({
       flex: 3,
       width: '80%',
       alignItems: 'center',
+      justifyContent: 'center',
+      alignItems: 'center'
     },
     input:{
       borderBottomWidth:1,
